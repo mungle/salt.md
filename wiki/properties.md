@@ -19,7 +19,8 @@ both sides.
 3. Fill in whatever the type needs — a select needs options, a relation needs
    **Links to**, a rollup needs four answers. Those fields appear under the
    property as soon as you pick the type.
-4. Click **Save**. Nothing is written until you do; **Cancel** discards the lot.
+4. Changes save automatically after a short pause. **Close** waits for pending changes.
+   If saving fails, the dialog stays open and offers **Retry**. Property deletion asks for confirmation.
 
 Rename a property by typing over its name. Change its type with the dropdown
 beside it. **Changing the type does not delete anything**: the values stay in
@@ -139,6 +140,20 @@ Click the cell to open the picker: type to narrow the list, type a name that
 does not exist yet and an entry appears offering to create it on the spot, or
 click the ⋯ beside an option to recolour it (nine named colours, Gray through
 Red) or delete it. Choosing the option that is already set clears the cell.
+
+In **Properties**, click an option chip to edit its **Option name**. Names save
+automatically after a short pause. Blank names and names already used by another
+option are not accepted. Drag an option chip before or after another chip to change its position in
+pickers and board columns (or focus it and press Alt + Left/Right); the red **Delete option** trash icon asks for confirmation before removing its definition. Colours
+are available in the same panel. Edits save automatically, including colours and
+option order. Escape closes the panel; it does not undo saved edits. Invalid
+names are not saved. The panel starts at its original 150px width and expands
+for longer names, within the viewport. This also works for multi-select options.
+
+Renaming and reordering preserve option ids, row selections and filters.
+Deleting in Properties keeps existing row values; references to a deleted
+option appear as stray ids, as described below. Reordering does not change
+sorting by stored option id.
 
 Deleting an option here removes it from the collection's schema and clears it
 from the row you are on — **but not from other rows**. Those cells keep the id

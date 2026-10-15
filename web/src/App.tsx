@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError } from './api';
+import { activateNewPage, keepNewPage } from './newPageDrafts';
 import { serverMessage } from './serverErrors';
 import { WifiOff } from 'lucide-react';
 import type { Me, PageMeta, User, Workspace } from './types';
@@ -883,10 +884,35 @@ export default function App() {
     navigate(first ? first.id : null, true);
   }, [pages, currentId, navigate]);
 
+  useEffect(() => {
+    activateNewPage(indexOpen ? null : currentId, (id) => {
+      setOpenTabs(previous => previous.filter(tab => tab !== id));
+      setExtraPages(previous => { const next = new Map(previous); next.delete(id); return next; });
+      void loadPages();
+    });
+  }, [currentId, indexOpen, loadPages]);
+
+  useEffect(() => {
+    const keepEdited = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const body = target.closest<HTMLElement>('.page-body[data-page-id]');
+      if (body?.dataset.pageId) keepNewPage(body.dataset.pageId);
+    };
+    document.addEventListener('beforeinput', keepEdited, true);
+    document.addEventListener('input', keepEdited, true);
+    document.addEventListener('change', keepEdited, true);
+    return () => {
+      document.removeEventListener('beforeinput', keepEdited, true);
+      document.removeEventListener('input', keepEdited, true);
+      document.removeEventListener('change', keepEdited, true);
+    };
+  }, []);
+
   const createPage = useCallback(
     async (parentId: string | null, type: 'doc' | 'collection' = 'doc') => {
       // Root pages land in the selected workspace; children inherit the parent's.
-      const p = await api.createPage(parentId, '', type, undefined, parentId ? undefined : currentWs);
+      const p = await api.createPage(parentId, '', type, undefined, parentId ? undefined : currentWs, true);
       setPages((prev) => (prev ? [...prev, p] : [p]));
       navigate(p.id);
       // Land in the title: a new page is created to be named, and from ⌥N there

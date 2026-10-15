@@ -41,8 +41,10 @@ being typed, stays a plain letter while something is, and appears in the sheet.
 
 Embeds covers a collection inside a document (#22, #26): the embed keeps its
 filters to itself and across a reload, a second embed and the collection's own
-page still show the saved view, and the embed's toolbar leaves out what belongs
-to the collection page.
+page still show the saved view. Column visibility inherits the shared view until
+changed locally; show/hide all and individual toggles persist across reloads
+without affecting other pages or a second block in the same document.
+The embed's toolbar leaves out what belongs to the collection page.
 
 People covers a person property with several people and a list of who can be
 picked (#11): only those are offered, nobody else can be typed in, the list
@@ -58,3 +60,14 @@ collaborative updates, read-only access and Markdown/HTML export.
 
 Slash-menu regression covers unique section headings, filtering with `/ch`,
 clearing the query and a query with no matches.
+
+Collection creation covers relation and status defaults from a block's local
+filters, unchanged shared views, visibility after returning, opening the created
+page, duplicate protection during slow requests, and retry after an error.
+The check gate also tests typed defaults, alternatives, conflicting filters,
+read-only properties and explicit board/calendar presets.
+
+Empty-page coverage advances past a minute while the new page remains open,
+then checks disposal only after navigation, immediate title/body edits before
+debounce, existing blank pages and another active editor. Server tests cover
+recoverable disposal, creation identity, changed properties and structured content.

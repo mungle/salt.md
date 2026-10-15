@@ -17,6 +17,7 @@ import type {
   Workspace,
 } from './types';
 import { t } from './i18n';
+import { rememberNewPage, keepNewPage } from './newPageDrafts';
 import type { Prefs } from './i18n';
 import { formatBytes } from './format';
 import { serverMessage } from './serverErrors';
@@ -301,10 +302,14 @@ export const api = {
     type: 'doc' | 'collection' = 'doc',
     props?: Record<string, unknown>,
     workspaceId?: string,
+    discardIfUntouched = false,
   ) =>
     req<Page>('/api/pages', {
       method: 'POST',
       body: JSON.stringify({ parentId, title, type, props, workspaceId }),
+    }).then(page => {
+      if (discardIfUntouched) rememberNewPage(page);
+      return page;
     }),
   getPage: (id: string) => req<Page>(`/api/pages/${id}`),
   updatePage: (
@@ -327,11 +332,13 @@ export const api = {
       workspaceId: string;
     }>,
     opts?: { materialize?: boolean },
-  ) =>
-    req<Page>(`/api/pages/${id}${opts?.materialize ? '?materialize=1' : ''}`, {
+  ) => {
+    if (Object.keys(patch).some(key => key !== 'content' && key !== 'position')) keepNewPage(id);
+    return req<Page>(`/api/pages/${id}${opts?.materialize ? '?materialize=1' : ''}`, {
       method: 'PATCH',
       body: JSON.stringify(patch),
-    }),
+    });
+  },
   trashPage: (id: string) => req<{ ok: boolean }>(`/api/pages/${id}`, { method: 'DELETE' }),
   // fromTemplate: instantiate a template (copy keeps the title).
   // asTemplate: save as template — the COPY becomes the template (snapshot),

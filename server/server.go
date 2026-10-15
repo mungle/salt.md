@@ -18,11 +18,11 @@ import (
 )
 
 type Server struct {
-	db          *sql.DB
-	mux         *http.ServeMux
-	dataDir     string
+	db      *sql.DB
+	mux     *http.ServeMux
+	dataDir string
 	// name → the markup INSIDE a Lucide <svg>, for the print view.
-	lucide      map[string]string
+	lucide map[string]string
 	// The third-party licence notices, embedded from the repository root.
 	notices     string
 	addr        string
@@ -236,6 +236,7 @@ func New(dataDir string, dist fs.FS) (*Server, error) {
 	m.HandleFunc("GET /api/pages/{id}", s.auth(s.handleGetPage))
 	m.HandleFunc("PATCH /api/pages/{id}", s.auth(s.handleUpdatePage))
 	m.HandleFunc("DELETE /api/pages/{id}", s.auth(s.handleDeletePage))
+	m.HandleFunc("POST /api/pages/{id}/discard-empty", s.auth(s.sessionOnly(s.handleDiscardEmptyPage)))
 	m.HandleFunc("POST /api/pages/{id}/restore", s.auth(s.handleRestorePage))
 	m.HandleFunc("POST /api/reindex-siblings", s.auth(s.handleReindexSiblings))
 	m.HandleFunc("GET /api/pages/{id}/backlinks", s.auth(s.handleBacklinks))

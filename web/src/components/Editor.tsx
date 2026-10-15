@@ -8,6 +8,7 @@ import {
 import { filterSuggestionItems, insertOrUpdateBlockForSlashMenu } from '@blocknote/core';
 import { en as coreEn } from '@blocknote/core/locales';
 import { BlockNoteView } from '@blocknote/mantine';
+import { keepNewPage } from '../newPageDrafts';
 import { api } from '../api';
 import { toast } from '../toast';
 import type { Backlink, CollectionConfig, Page, PageMeta, PropOption, User } from '../types';
@@ -691,6 +692,7 @@ function PageHeader({
   };
 
   const saveMeta = (patch: { title?: string; icon?: string; cover?: string; tags?: string[]; description?: string }) => {
+    keepNewPage(pageId);
     onMetaChange(pageId, patch);
     onLocalMeta(patch);
     // Accumulate across fields so a title edit followed quickly by a cover
@@ -1881,6 +1883,7 @@ function BlockContent({
       }
     };
     const persist = () => {
+      if (!seedFailed.current && !isEffectivelyEmpty(editor.document)) keepNewPage(provider.pageId);
       dirty.current = true;
       window.clearTimeout(matTimer.current);
       matTimer.current = window.setTimeout(() => flush(false), 1500);

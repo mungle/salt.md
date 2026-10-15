@@ -147,6 +147,7 @@
   "Copied": "Kopiert",
   "Copied ✓": "Kopiert ✓",
   "Copies the databases with their columns, options and views, plus the workspace rules. Rows and documents stay where they are.": "Kopiert die Datenbanken mit ihren Spalten, Optionen und Ansichten sowie die Regeln des Workspace. Zeilen und Dokumente bleiben, wo sie sind.",
+  "Complete the properties to match this view’s filters.": "Ergänze die Eigenschaften, damit die Seite den Filtern dieser Ansicht entspricht.",
   "Copy": "Kopieren",
   "Copy MCP command": "MCP-Befehl kopieren",
   "Copy Markdown link": "Markdown-Link kopieren",

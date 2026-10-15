@@ -1621,6 +1621,16 @@ function BlockContent({
   const getSlashItems = async (query: string) => {
     const custom = [
       {
+        title: t('Inline checkbox'),
+        subtext: t('A clickable checkbox inside text or a table cell'),
+        aliases: ['checkbox', 'inline', 'casella', 'spunta', 'kontrollkästchen'], // i18n-ok: search aliases
+        group: 'Basic blocks',
+        icon: <Check size={18} />,
+        onItemClick: () => editor.insertInlineContent([
+          { type: 'inlineCheckbox', props: { checked: false } },
+        ]),
+      },
+      {
         title: t('Diagram'),
         subtext: t('A flow chart written as text'),
         aliases: ['diagram', 'diagramm', 'mermaid', 'flow', 'flussdiagramm', 'graph'], // i18n-ok: search aliases, deliberately multi

@@ -1098,5 +1098,7 @@
   "No mentions yet.": "Noch keine Erwähnungen.",
   "{name} mentioned you": "{name} hat dich erwähnt",
   "Unread": "Ungelesen",
-  "People": "Personen"
+  "People": "Personen",
+  "Inline checkbox": "Inline-Kontrollkästchen",
+  "A clickable checkbox inside text or a table cell": "Ein anklickbares Kontrollkästchen im Text oder in einer Tabellenzelle"
 }

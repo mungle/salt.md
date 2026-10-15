@@ -1,4 +1,6 @@
+import './inlineCheckbox.css';
 import { BlockNoteSchema, defaultBlockSpecs, defaultInlineContentSpecs } from '@blocknote/core';
+import { t } from './i18n';
 import { createReactInlineContentSpec } from '@blocknote/react';
 import { bookmarkSpec, databaseSpec, calloutSpec, tocSpec, subpagesSpec, columnsSpec, mermaidSpec } from './blocks';
 
@@ -30,6 +32,41 @@ export const pageLinkSpec = createReactInlineContentSpec(
         {props.inlineContent.props.label || 'Untitled'}
       </button>
     ),
+  },
+);
+
+// Inline content works in paragraphs and table cells. Updating the node through
+// BlockNote keeps toggles in the same persistence, collaboration and undo flow.
+export const inlineCheckboxSpec = createReactInlineContentSpec(
+  {
+    type: 'inlineCheckbox',
+    propSchema: { checked: { default: false } },
+    content: 'none',
+  } as const,
+  {
+    render: ({ inlineContent, updateInlineContent, editor }) => (
+      <span className="inline-checkbox" contentEditable={false}>
+        <input
+          type="checkbox"
+          aria-label={t('Inline checkbox')}
+          checked={inlineContent.props.checked}
+          disabled={!editor.isEditable}
+          onMouseDown={(event) => event.preventDefault()}
+          onChange={(event) => {
+            if (editor.isEditable) updateInlineContent({ type: 'inlineCheckbox', props: { checked: event.target.checked } });
+          }}
+        />
+      </span>
+    ),
+    toExternalHTML: ({ inlineContent }) => (
+      <span data-inline-checkbox={inlineContent.props.checked ? 'true' : 'false'}>
+        {inlineContent.props.checked ? '☑' : '☐'}
+      </span>
+    ),
+    parse: (element) => {
+      const checked = element.getAttribute('data-inline-checkbox');
+      return checked === null ? undefined : { checked: checked === 'true' };
+    },
   },
 );
 
@@ -81,6 +118,7 @@ export const saltSchema =
       ...defaultInlineContentSpecs,
       pageLink: pageLinkSpec,
       userMention: userMentionSpec,
+      inlineCheckbox: inlineCheckboxSpec,
     },
   });
 

@@ -249,6 +249,12 @@ A horizontal rule. Type `---`.
 A table of text with editable cells, **three columns and two rows** to start. A
 cell holds inline content (text, bold, italic, links), not blocks.
 
+Use **/ → Inline checkbox** (or type `/checkbox`) to insert a clickable checkbox
+inside the current cell. It can stand alone or sit beside text. Its checked state
+is saved with the document; read-only readers cannot toggle it. The existing
+Check List command still inserts a checklist block outside the table. Markdown
+and HTML exports show `☐` or `☑`.
+
 Moving around: **Tab** goes to the next cell, **Shift+Tab** to the previous one,
 **Enter** to the cell below. **Backspace** at the start of a cell does nothing,
 so a table cannot be deleted from the inside by a stray keystroke. Drag the

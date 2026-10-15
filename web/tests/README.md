@@ -52,3 +52,6 @@ row holding several keeps them until somebody picks one after a switch back.
 Properties autosave covers debounced writes, immediate close, edits during a
 pending close, reverting during a pending write, failed writes and retry,
 deletion confirmation, and removed filters staying removed after recreation.
+
+Inline checkbox covers slash insertion within a table cell, persistence, undo/redo,
+collaborative updates, read-only access and Markdown/HTML export.

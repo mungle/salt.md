@@ -1090,5 +1090,12 @@
   "Expires:": "Läuft ab:",
   "Creating…": "Wird erstellt…",
   "Could not save changes.": "Änderungen konnten nicht gespeichert werden.",
-  "Delete property “{name}”?": "Eigenschaft „{name}“ löschen?"
+  "Delete property “{name}”?": "Eigenschaft „{name}“ löschen?",
+  "Mention a person": "Eine Person erwähnen",
+  "No people with access to this page match.": "Keine passende Person mit Zugriff auf diese Seite.",
+  "Type @ to mention someone": "@ eingeben, um jemanden zu erwähnen",
+  "Could not load notifications.": "Benachrichtigungen konnten nicht geladen werden.",
+  "No mentions yet.": "Noch keine Erwähnungen.",
+  "{name} mentioned you": "{name} hat dich erwähnt",
+  "Unread": "Ungelesen"
 }

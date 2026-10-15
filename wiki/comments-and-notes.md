@@ -58,6 +58,29 @@ The ⋯ menu also always carries **To the comments**, at every width. That one
 always opens the panel rather than toggling it: an entry that toggles would be
 a no-op half the times somebody reaches for it.
 
+### Mentioning a colleague
+
+Type **@** in the comment box, then choose a person from the list. Use the
+arrow keys and Enter, or click their name. Only active members who can read
+this page are offered. Selecting a person links the mention to their account;
+typing a name without selecting it remains ordinary text. Editing inside a
+selected name removes its link, so select it again if you change it.
+
+Sending creates one internal notification per mentioned colleague, even if the
+same person is mentioned twice. Mentioning yourself does not notify you.
+Retrying the same draft after a connection failure does not create another
+comment or notification. The label keeps the spelling used when posted; the
+recipient is identified by account ID even after a rename.
+
+Open **Notifications** (the bell in the sidebar) to see who mentioned you and
+where. Choosing an item marks it read and opens the exact comment, including a
+resolved comment. Notifications refresh every 15 seconds while Salt is visible,
+and when you return to the window. There are no mention emails. Losing access
+to a page hides its notifications; deleting the comment deletes its notifications.
+
+This first version supports mentions in browser comments only. The document
+editor's **@** still links pages. Assigning a Person property does not notify.
+
 ### Writing one
 
 1. Press the speech-bubble button. The panel opens with the cursor already in

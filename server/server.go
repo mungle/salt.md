@@ -309,6 +309,9 @@ func New(dataDir string, dist fs.FS) (*Server, error) {
 	m.HandleFunc("POST /api/import", s.auth(s.handleImport))
 	m.HandleFunc("POST /api/import-zip", s.auth(s.handleImportZip))
 
+	m.HandleFunc("GET /api/pages/{id}/mention-people", s.auth(s.sessionOnly(s.handleMentionPeople)))
+	m.HandleFunc("GET /api/notifications", s.auth(s.sessionOnly(s.handleNotifications)))
+	m.HandleFunc("POST /api/notifications/{id}/read", s.auth(s.sessionOnly(s.handleReadNotification)))
 	m.HandleFunc("GET /api/pages/{id}/comments", s.auth(s.handleListComments))
 	m.HandleFunc("POST /api/pages/{id}/comments", s.auth(s.handleCreateComment))
 	m.HandleFunc("POST /api/comments/{id}/resolve", s.auth(s.handleResolveComment))

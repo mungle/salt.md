@@ -1,3 +1,4 @@
+import { commentTarget, OPEN_COMMENT } from '../commentMentions';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   useCreateBlockNote,
@@ -95,6 +96,17 @@ export default function Editor(props: EditorProps) {
       setStructurePanelOpen(false);
     }
   };
+  useEffect(() => {
+    const reveal = () => {
+      if (commentTarget()?.pageId === props.pageId) showComments(true);
+    };
+    reveal();
+    window.addEventListener(OPEN_COMMENT, reveal);
+    return () => window.removeEventListener(OPEN_COMMENT, reveal);
+    // The event only opens the panel; it never reads its previous state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.pageId]);
+
   const toggleStructure = () => showStructure(!structureOpen);
 
   // Same rule as the other single letters (see App.tsx): only while nothing is
@@ -226,6 +238,7 @@ export default function Editor(props: EditorProps) {
       </PageHeader>
       {commentsOpen && canComment && (
         <CommentsPanel
+          key={page.id}
           pageId={page.id}
           myUserId={props.user.id}
           open

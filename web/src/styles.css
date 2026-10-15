@@ -10217,3 +10217,20 @@ body:has(.live-down) .update-banner {
 .prop-url-open { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 24px; height: 24px; color: var(--muted); border-radius: 4px; }
 .prop-url-open:hover { color: var(--accent); background: var(--hover); }
 .prop-url-value :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Selected account mentions and the personal inbox. */
+.person-mention { color: var(--accent); background: var(--hover); border-radius: 4px; padding: 1px 3px; font-weight: 600; }
+.cp-item.is-mentioned { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+.mention-people { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); margin: 6px 0; }
+.mention-people button { display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; color: inherit; padding: 8px 10px; text-align: left; cursor: pointer; }
+.mention-people button[aria-selected="true"], .mention-people button:hover { background: var(--hover); }
+.mention-people p { padding: 8px 10px; font-size: 12px; }
+.mention-notifications { color: var(--fg); background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 0; width: min(480px, calc(100vw - 24px)); max-height: min(700px, 85vh); box-shadow: 0 12px 48px #0003; }
+.mention-notifications::backdrop { background: #0005; }
+.mention-notifications h2 { margin: 0; font-size: 17px; }
+.notification-list { padding: 12px; overflow-wrap: anywhere; }
+.notification-item { display: flex; flex-direction: column; gap: 6px; width: 100%; padding: 14px; margin-bottom: 8px; text-align: left; color: inherit; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
+.notification-item.is-unread { border-left: 3px solid var(--accent); background: var(--hover); }
+.notification-item:hover { background: var(--hover); }
+.notification-excerpt { white-space: pre-wrap; font-size: 13px; opacity: .85; }
+.notification-item small { opacity: .7; }

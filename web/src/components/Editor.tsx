@@ -1,4 +1,4 @@
-import { commentTarget, OPEN_COMMENT } from '../commentMentions';
+import { commentTarget, OPEN_COMMENT, newMentionID, pageMentionTarget, clearPageMentionTarget, OPEN_PAGE_MENTION } from '../commentMentions';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   useCreateBlockNote,
@@ -1739,7 +1739,25 @@ function BlockContent({
     return items;
   };
 
-  const getMentionItems = (query: string) => buildLinkItems(query);
+  const getMentionItems = async (query: string) => {
+    const [links, people] = await Promise.all([
+      buildLinkItems(query),
+      api.mentionPeople(provider.pageId).catch(() => []),
+    ]);
+    const matches = people.filter(person => person.name.toLowerCase().includes(query.toLowerCase())).slice(0, 8);
+    return [
+      ...matches.map(person => ({
+        title: person.name,
+        subtext: t('Mention a person'),
+        group: t('People'),
+        onItemClick: () => editor.insertInlineContent([
+          { type: 'userMention', props: { userId: person.id, label: person.name, mentionId: newMentionID(), authorId: user.id, originPageId: provider.pageId } },
+          ' ',
+        ]),
+      })),
+      ...links.map(item => ({ ...item, group: t('Pages') })),
+    ];
+  };
   // Wiki-links: the trigger is "[", and BlockNote has no real concept of a
   // two-character one — passing it "[[" never fires on ordinary typing,
   // since its match compares the WHOLE trigger string against (n trailing
@@ -1791,6 +1809,28 @@ function BlockContent({
       }
     }
   }, [editor, provider, seed]);
+
+  // A notification can arrive before this editor mounts or while it is
+  // already open. Wait for the CRDT to render, then reveal the exact chip.
+  useEffect(() => {
+    const reveal = () => {
+      const target = pageMentionTarget();
+      if (target?.pageId !== provider.pageId) return;
+      const element = Array.from(document.querySelectorAll<HTMLElement>('[data-person-mention-id]'))
+        .find(node => node.dataset.personMentionId === target.mentionId);
+      if (!element) return;
+      document.querySelectorAll('.page-person-mention.is-mentioned').forEach(node => node.classList.remove('is-mentioned'));
+      element.classList.add('is-mentioned');
+      element.scrollIntoView({ block: 'center' });
+      element.focus({ preventScroll: true });
+      clearPageMentionTarget();
+    };
+    reveal();
+    const observer = new MutationObserver(reveal);
+    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener(OPEN_PAGE_MENTION, reveal);
+    return () => { observer.disconnect(); window.removeEventListener(OPEN_PAGE_MENTION, reveal); };
+  }, [provider]);
 
   // Persist a materialized copy to pages.content so search, export, backlinks
   // and the Markdown/MCP API see current text. Debounced; skips the CRDT reset.

@@ -3,7 +3,7 @@ import { Bell, X } from 'lucide-react';
 import { api } from '../api';
 import { t } from '../i18n';
 import { formatRelative } from '../format';
-import { openComment } from '../commentMentions';
+import { openComment, openPageMention, hasPageMention } from '../commentMentions';
 import type { MentionNotification } from '../types';
 import Portal from './Portal';
 import { useExclusiveModal } from '../modal';
@@ -45,10 +45,18 @@ export default function Notifications() {
       try {
         // Fetch again before navigating, so a revoked or deleted page does not
         // open from a stale item. The API also checks access to the comment.
-        const comments = await api.listComments(n.pageId);
-        if (!comments.some(c => c.id === n.commentId)) { await load(); return; }
+        if (n.mentionId) {
+          const page = await api.getPage(n.pageId);
+          if (!hasPageMention(page.content, n.mentionId)) { await load(); return; }
+        } else {
+          const comments = await api.listComments(n.pageId);
+          if (!comments.some(c => c.id === n.commentId)) { await load(); return; }
+        }
         await api.readNotification(n.id);
-        setOpen(false); openComment(n.pageId, n.commentId); void load();
+        setOpen(false);
+        if (n.mentionId) openPageMention(n.pageId, n.mentionId);
+        else openComment(n.pageId, n.commentId);
+        void load();
       } catch { setError(true); setData({ items: [], unread: 0 }); }
     }} />}
   </>;

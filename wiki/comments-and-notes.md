@@ -78,8 +78,20 @@ resolved comment. Notifications refresh every 15 seconds while Salt is visible,
 and when you return to the window. There are no mention emails. Losing access
 to a page hides its notifications; deleting the comment deletes its notifications.
 
-This first version supports mentions in browser comments only. The document
-editor's **@** still links pages. Assigning a Person property does not notify.
+### Mentioning someone in the page itself
+
+In the document body, type **@** and choose a colleague from **People**. The
+same menu keeps page links under **Pages**; `[[` continues to offer page links.
+The selected name becomes an inline chip linked to the person's account.
+A notification is created when the page autosaves, and opens that exact chip.
+Only people with access are offered, and access is checked again by the server.
+
+Each chip has a stable identity: more edits, another collaborator saving the
+page, or undo/redo do not resend its notification. Removing the chip hides its
+notification; restoring it brings back its previous read state. Inserting a
+fresh mention creates a new notification. Copying an existing chip or page does
+not send a new invitation. Mentions remain readable in text and HTML exports.
+Assigning a Person property still does not notify.
 
 ### Writing one
 

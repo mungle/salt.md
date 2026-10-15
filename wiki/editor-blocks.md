@@ -396,7 +396,7 @@ reaches. This is the same block an agent makes with `embed_database`.
 
 Two triggers, one menu:
 
-- **`@`**: mention a page.
+- **`@`**: mention a person or link a page.
 - **`[[`**: the same menu, for wiki-link habits.
 
 The menu lists up to **twelve** pages whose titles contain what you typed, each

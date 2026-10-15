@@ -10234,3 +10234,6 @@ body:has(.live-down) .update-banner {
 .notification-item:hover { background: var(--hover); }
 .notification-excerpt { white-space: pre-wrap; font-size: 13px; opacity: .85; }
 .notification-item small { opacity: .7; }
+
+.page-person-mention { white-space: nowrap; }
+.page-person-mention.is-mentioned { outline: 2px solid var(--accent); outline-offset: 2px; }

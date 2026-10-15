@@ -169,6 +169,8 @@ type mentionNotification struct {
 	PageID     string `json:"pageId"`
 	PageTitle  string `json:"pageTitle"`
 	CommentID  string `json:"commentId"`
+	MentionID  string `json:"mentionId,omitempty"`
+	content    string
 	AuthorName string `json:"authorName"`
 	Body       string `json:"body"`
 	CreatedAt  string `json:"createdAt"`
@@ -176,7 +178,12 @@ type mentionNotification struct {
 }
 
 func (s *Server) handleNotifications(w http.ResponseWriter, r *http.Request) {
-	rows, err := s.db.Query(`SELECT n.id,c.page_id,p.title,c.id,c.author_name,c.body,n.created_at,n.read_at FROM mention_notifications n JOIN comments c ON c.id=n.comment_id JOIN pages p ON p.id=c.page_id WHERE n.user_id=? AND p.trashed_at IS NULL ORDER BY n.created_at DESC,n.id DESC`, requestUser(r).ID)
+	rows, err := s.db.Query(`SELECT n.id,c.page_id,p.title,c.id,c.author_name,c.body,n.created_at,n.read_at,'' AS mention_id,'' AS content
+ FROM mention_notifications n JOIN comments c ON c.id=n.comment_id JOIN pages p ON p.id=c.page_id WHERE n.user_id=? AND p.trashed_at IS NULL
+ UNION ALL
+ SELECT n.id,n.page_id,p.title,'',n.author_name,'',n.created_at,n.read_at,n.mention_id,p.content
+ FROM page_mention_notifications n JOIN pages p ON p.id=n.page_id WHERE n.user_id=? AND p.trashed_at IS NULL
+ ORDER BY 7 DESC,1 DESC`, requestUser(r).ID, requestUser(r).ID)
 	if err != nil {
 		httpError(w, 500, "could not load notifications")
 		return
@@ -185,7 +192,7 @@ func (s *Server) handleNotifications(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var n mentionNotification
 		var read sql.NullString
-		if rows.Scan(&n.ID, &n.PageID, &n.PageTitle, &n.CommentID, &n.AuthorName, &n.Body, &n.CreatedAt, &read) != nil {
+		if rows.Scan(&n.ID, &n.PageID, &n.PageTitle, &n.CommentID, &n.AuthorName, &n.Body, &n.CreatedAt, &read, &n.MentionID, &n.content) != nil {
 			rows.Close()
 			httpError(w, 500, "could not load notifications")
 			return
@@ -207,6 +214,19 @@ func (s *Server) handleNotifications(w http.ResponseWriter, r *http.Request) {
 		if !s.canReadReq(r, n.PageID) {
 			continue
 		}
+		if n.MentionID != "" {
+			found := false
+			for _, mention := range extractPageMentions([]byte(n.content)) {
+				if mention.ID == n.MentionID && mention.UserID == requestUser(r).ID {
+					n.Body = mention.Excerpt
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			} // removal, API overwrite or a restored revision
+		}
 		if !n.Read {
 			unread++
 		}
@@ -216,14 +236,28 @@ func (s *Server) handleNotifications(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]any{"items": visible, "unread": unread})
 }
 func (s *Server) handleReadNotification(w http.ResponseWriter, r *http.Request) {
-	result, err := s.db.Exec(`UPDATE mention_notifications SET read_at=COALESCE(read_at,?) WHERE id=? AND user_id=?`, now(), r.PathValue("id"), requestUser(r).ID)
+	tx, err := s.db.Begin()
 	if err != nil {
 		httpError(w, 500, "could not mark notification read")
 		return
 	}
-	n, _ := result.RowsAffected()
-	if n == 0 {
+	defer tx.Rollback()
+	var total int64
+	for _, table := range []string{"mention_notifications", "page_mention_notifications"} {
+		result, err := tx.Exec(`UPDATE `+table+` SET read_at=COALESCE(read_at,?) WHERE id=? AND user_id=?`, now(), r.PathValue("id"), requestUser(r).ID)
+		if err != nil {
+			httpError(w, 500, "could not mark notification read")
+			return
+		}
+		n, _ := result.RowsAffected()
+		total += n
+	}
+	if total == 0 {
 		httpError(w, 404, "notification not found")
+		return
+	}
+	if tx.Commit() != nil {
+		httpError(w, 500, "could not mark notification read")
 		return
 	}
 	writeJSON(w, map[string]bool{"ok": true})

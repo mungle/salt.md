@@ -64,6 +64,8 @@ func inlineHTML(raw json.RawMessage) string {
 		switch it.Type {
 		case "link":
 			b.WriteString(`<a href="` + html.EscapeString(it.Href) + `">` + inlineHTML(it.Content) + "</a>")
+		case "userMention":
+			b.WriteString(html.EscapeString("@" + strProp(it.Props, "label", "")))
 		case "pageLink":
 			label := strProp(it.Props, "label", "Untitled")
 			id := strProp(it.Props, "pageId", "")

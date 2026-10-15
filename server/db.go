@@ -329,6 +329,19 @@ CREATE TABLE IF NOT EXISTS mention_notifications (
  UNIQUE(user_id, comment_id)
 );
 CREATE INDEX IF NOT EXISTS idx_mention_notifications_user ON mention_notifications(user_id, created_at);
+CREATE TABLE IF NOT EXISTS page_mention_notifications (
+ id TEXT PRIMARY KEY,
+ page_id TEXT NOT NULL REFERENCES pages(id) ON DELETE CASCADE,
+ mention_id TEXT NOT NULL,
+ user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ author_id TEXT NOT NULL,
+ author_name TEXT NOT NULL,
+ created_at TEXT NOT NULL,
+ read_at TEXT,
+ UNIQUE(page_id, mention_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_page_mentions_user ON page_mention_notifications(user_id, created_at);
+
 
 `
 

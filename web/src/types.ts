@@ -148,7 +148,7 @@ export interface CommentMention {
 }
 export interface MentionPerson { id: string; name: string; avatar: string }
 export interface MentionNotification {
-  id: string; pageId: string; pageTitle: string; commentId: string;
+  id: string; pageId: string; pageTitle: string; commentId: string; mentionId?: string;
   authorName: string; body: string; createdAt: string; read: boolean;
 }
 export interface Comment {

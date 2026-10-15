@@ -48,3 +48,7 @@ People covers a person property with several people and a list of who can be
 picked (#11): only those are offered, nobody else can be typed in, the list
 stays open for several picks, the setting is in the Properties dialog, and a
 row holding several keeps them until somebody picks one after a switch back.
+
+Properties autosave covers debounced writes, immediate close, edits during a
+pending close, reverting during a pending write, failed writes and retry,
+deletion confirmation, and removed filters staying removed after recreation.

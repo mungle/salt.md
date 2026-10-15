@@ -1088,5 +1088,7 @@
   "New link": "Neuer Link",
   "Anyone with this link can view this page (read-only).": "Jeder mit diesem Link kann die Seite ansehen (nur lesen).",
   "Expires:": "Läuft ab:",
-  "Creating…": "Wird erstellt…"
+  "Creating…": "Wird erstellt…",
+  "Could not save changes.": "Änderungen konnten nicht gespeichert werden.",
+  "Delete property “{name}”?": "Eigenschaft „{name}“ löschen?"
 }

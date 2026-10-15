@@ -74,3 +74,6 @@ recoverable disposal, creation identity, changed properties and structured conte
 
 Trash navigation returns a deleted row or child document to its parent and
 removes its open tab.
+
+Mermaid coverage checks flowchart and sequence rendering after dependency upgrades,
+SVG images, saved diagram persistence, reload and HTML export.

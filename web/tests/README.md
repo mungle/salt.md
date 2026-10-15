@@ -71,3 +71,6 @@ Empty-page coverage advances past a minute while the new page remains open,
 then checks disposal only after navigation, immediate title/body edits before
 debounce, existing blank pages and another active editor. Server tests cover
 recoverable disposal, creation identity, changed properties and structured content.
+
+Trash navigation returns a deleted row or child document to its parent and
+removes its open tab.

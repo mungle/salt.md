@@ -55,3 +55,6 @@ deletion confirmation, and removed filters staying removed after recreation.
 
 Inline checkbox covers slash insertion within a table cell, persistence, undo/redo,
 collaborative updates, read-only access and Markdown/HTML export.
+
+Slash-menu regression covers unique section headings, filtering with `/ch`,
+clearing the query and a query with no matches.

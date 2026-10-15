@@ -1099,5 +1099,16 @@
   "＋ Link": "＋ Enlace",
   "＋ Person": "＋ Persona",
   "Inline checkbox": "Casilla en línea",
-  "A clickable checkbox inside text or a table cell": "Una casilla que se puede marcar dentro del texto o de una celda"
+  "A clickable checkbox inside text or a table cell": "Una casilla que se puede marcar dentro del texto o de una celda",
+  "Complete the properties to match this view’s filters.": "Completa las propiedades para que coincidan con los filtros de esta vista.",
+  "Could not save changes.": "No se pudieron guardar los cambios.",
+  "Delete property “{name}”?": "¿Eliminar la propiedad «{name}»?",
+  "Mention a person": "Mencionar a una persona",
+  "No people with access to this page match.": "No hay personas con acceso a esta página que coincidan.",
+  "Type @ to mention someone": "Escribe @ para mencionar a alguien",
+  "Could not load notifications.": "No se pudieron cargar las notificaciones.",
+  "No mentions yet.": "Todavía no hay menciones.",
+  "{name} mentioned you": "{name} te ha mencionado",
+  "Unread": "Sin leer",
+  "People": "Personas"
 }
